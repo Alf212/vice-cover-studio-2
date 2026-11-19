@@ -219,10 +219,12 @@ export function drawTitle(ctx, w, h, title, grade) {
 }
 
 // The caption: one quiet line of lettering on the foot shade, letterspaced
-// capitals in the same Anton face.
+// capitals in the same Anton face, a small star set either side of it the
+// way a poster credit line is punctuated.
 export function drawCaption(ctx, w, h, caption, grade) {
   if (!caption.trim()) return;
-  const size = fitFontSize(ctx, caption.toUpperCase(), w * 0.86, Math.min(w, h) * 0.052, 'Anton');
+  const text = caption.toUpperCase();
+  const size = fitFontSize(ctx, text, w * 0.86, Math.min(w, h) * 0.052, 'Anton');
   ctx.save();
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
@@ -232,9 +234,14 @@ export function drawCaption(ctx, w, h, caption, grade) {
   ctx.lineWidth = size * 0.18;
   ctx.strokeStyle = grade.ink;
   const y = h * 0.955;
-  ctx.strokeText(caption.toUpperCase(), w / 2, y);
+  ctx.strokeText(text, w / 2, y);
   ctx.fillStyle = '#fff8ee';
-  ctx.fillText(caption.toUpperCase(), w / 2, y);
+  ctx.fillText(text, w / 2, y);
+  const half = ctx.measureText(text).width / 2;
+  ctx.font = `${size * 0.8}px Anton, sans-serif`;
+  ctx.fillStyle = grade.titleStops[1];
+  ctx.fillText('★', w / 2 - half - size * 0.85, y);
+  ctx.fillText('★', w / 2 + half + size * 0.85, y);
   ctx.restore();
 }
 
